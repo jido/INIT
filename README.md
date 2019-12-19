@@ -65,7 +65,7 @@ Usual-carer := Amanda
 
 If more than one line is required to define the property value, that property is written as a complex property. 
 
-A complex property is written as a property name inside square brackets **[ ]** on a line of its own. It is followed by its value on the following lines. 
+A complex property is written as a property name inside square brackets **[ ]** on a line of its own. Its value follows below. 
 
 Example:
 ~~~properties
