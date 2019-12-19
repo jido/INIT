@@ -36,9 +36,9 @@ An INIT document contains _properties_ organised as a list of _simple_ propertie
 
 A simple property can _reference_ a complex property or another simple property.
 
-Whole-line comments are allowed.
+Whole-line _comments_ are allowed.
 
-The type of properties is defined externally. 
+The _type_ of the properties is defined externally. 
 
 ### Simple properties
 
