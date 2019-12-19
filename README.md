@@ -66,6 +66,8 @@ Example:
 Usual-carer := Amanda
 ~~~
 
+The property takes the value of the referenced property. This is particularly useful for inserting a complex property in the middle of simple properties.
+
 ### Complex properties 
 
 If more than one line is required to define the property value, that property is written as a complex property. 
