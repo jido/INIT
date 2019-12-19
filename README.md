@@ -134,7 +134,7 @@ Example:
 
 ### Comments
 
-Comments are on a line of their own and start with **-**.
+Comments are on a line of their own and start with **;**.
 
 Example:
 
