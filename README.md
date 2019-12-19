@@ -5,7 +5,7 @@ INIT is a human-readable data serialisation and exchange format.
 
 Sample file:
 
-~~~
+~~~properties
 Animal = tortoise
 Age = 34
 Name = Vel
@@ -23,13 +23,15 @@ Employee-id = 351
 
 Does the world need one more textual data interchange format?
 
-No it doesn't. There are already good choices; in many places XML and JSON are prevalent. 
+No it doesn't.
+
+There are already good choices; in many places XML and JSON are prevalent. 
 
 The syntax of INIT is different. If you like it, use it – or else don't. 
 
 ## Structure
 
-An INIT document contains _properties_ organised as a list of simple properties followed by complex properties. 
+An INIT document contains _properties_ organised as a list of _simple_ properties followed by _complex_ properties. 
 
 A simple property can _reference_ a complex property or another simple property. 
 
@@ -37,11 +39,11 @@ The type of properties is defined externally.
 
 ### Simple properties
 
-A _simple_ property is written as the property name followed by the **=** sign and the property value. 
+A simple property is written as the property name followed by the **=** sign and then the property value. 
 
 Example:
 
-~~~
+~~~properties
 Animal = tortoise
 ~~~
 
@@ -55,18 +57,18 @@ A simple property can _reference_ another property by replacing **=** with **:=*
 
 Example:
 
-~~~
+~~~properties
 Usual-carer := Amanda
 ~~~
 
 ### Complex properties 
 
-If more than one line is required to define the property value, that property is written as a _complex_ property. 
+If more than one line is required to define the property value, that property is written as a complex property. 
 
 A complex property is written as a property name inside square brackets **[ ]** on a line of its own. It is followed by its value on the following lines. 
 
 Example:
-~~~
+~~~properties
 [Amanda]
 ~~~
 
@@ -76,7 +78,7 @@ A _property set_ is an object containing other properties.
 
 Example:
 
-~~~
+~~~properties
 [Profile]
 Favourite-food = baby leaf
 Usual-carer := Amanda
@@ -90,7 +92,7 @@ In an array, property names are replaced with numbers that denote the index of t
 
 Example:
 
-~~~
+~~~properties
 [Visits]
 1 = 2019-09-13 07:34
 2 = 2019-09-14 10:12
@@ -99,11 +101,11 @@ Example:
 
 If the array is multi dimensional, the indices are separated with **.**
 
-To simplify writing the index numbers, the number can be replaced with a **.** to indicate the next index in the sequence. For a multi dimensional array, only the last index is incremented. 
+To simplify the writing of index numbers, a number can be replaced with a dot (**.**) to indicate the next index in the sequence. For a multi dimensional array, only the last index is incremented. 
 
 Example:
 
-~~~
+~~~properties
 [Results]
 1.1 = blue
 . = green
@@ -111,4 +113,16 @@ Example:
 2.1 = black
 . = orange
 . = yellow
+~~~
+
+#### Multiline text
+
+To write text on multiple lines, just replace it with an array.
+
+Example:
+
+~~~properties
+[Address Lines]
+1 = 1000 Long Drive
+. = Little Mead Green
 ~~~
