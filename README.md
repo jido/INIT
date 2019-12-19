@@ -6,7 +6,7 @@ INIT is a human-readable data serialisation and exchange format.
 Sample file:
 
 ~~~properties
-- This is the vet file for Vel
+; This is the vet file for Vel
 Animal = tortoise
 Age = 34
 Name = Vel
@@ -50,7 +50,7 @@ Example:
 Animal = tortoise
 ~~~
 
-The property name can be pretty much anything, as long as it doesn't contain **=**, start with **[** or **-** or end with **:**. 
+The property name can be pretty much anything, as long as it doesn't contain **=**, start with **[** or **;** or end with **:**. 
 
 The property value can also be anything as long as it is on a single line. 
 
@@ -139,5 +139,5 @@ Comments are on a line of their own and start with **-**.
 Example:
 
 ~~~properties
-- This is the vet file for Vel
+; This is the vet file for Vel
 ~~~
