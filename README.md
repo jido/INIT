@@ -6,6 +6,7 @@ INIT is a human-readable data serialisation and exchange format.
 Sample file:
 
 ~~~properties
+- This is the vet file for Vel
 Animal = tortoise
 Age = 34
 Name = Vel
@@ -33,7 +34,9 @@ The syntax of INIT is different. If you like it, use it – or else don't.
 
 An INIT document contains _properties_ organised as a list of _simple_ properties followed by _complex_ properties. 
 
-A simple property can _reference_ a complex property or another simple property. 
+A simple property can _reference_ a complex property or another simple property.
+
+Whole-line comments are allowed.
 
 The type of properties is defined externally. 
 
@@ -47,11 +50,13 @@ Example:
 Animal = tortoise
 ~~~
 
-The property name can be pretty much anything, as long as it doesn't contain **=**, start with **[** or end with **:**. 
+The property name can be pretty much anything, as long as it doesn't contain **=**, start with **[** or **-** or end with **:**. 
 
 The property value can also be anything as long as it is on a single line. 
 
 White space around the property name is trimmed. White space around a property value is also trimmed for the default property type. 
+
+#### Reference
 
 A simple property can _reference_ another property by replacing **=** with **:=** and writing the name of the referenced property as the property value. 
 
@@ -125,4 +130,14 @@ Example:
 [Address Lines]
 1 = 1000 Long Drive
 . = Little Mead Green
+~~~
+
+### Comments
+
+Comments are on a line of their own and start with **-**.
+
+Example:
+
+~~~properties
+- This is the vet file for Vel
 ~~~
