@@ -25,7 +25,7 @@ Does the world need one more textual data interchange format?
 
 No it doesn't.
 
-There are already good choices; in many places XML and JSON are prevalent. 
+There are already good choices; in many places XML and JSON are prevalent. For documents with a simple structure, even the relatively terse JSON syntax feels almost plump.  
 
 The syntax of INIT is different. If you like it, use it – or else don't. 
 
@@ -65,7 +65,7 @@ Usual-carer := Amanda
 
 If more than one line is required to define the property value, that property is written as a complex property. 
 
-A complex property is written as a property name inside square brackets **[ ]** on a line of its own. Its value follows below. 
+A complex property is written as the property name inside square brackets **[ ]** on a line of its own. Its value follows below. 
 
 Example:
 ~~~properties
