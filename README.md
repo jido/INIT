@@ -15,7 +15,7 @@ Name = Vel
 
 [Profile]
 Favourite-food = baby leaf
-Usual-carer = %(Amanda)
+Usual-carer = %[Amanda]
 
 [Amanda]
 Name = Amanda Wall
@@ -66,12 +66,12 @@ White space around a property value is also trimmed for the default property typ
 
 #### Reference
 
-A simple property can _reference_ another property by placing the referenced property name inside **%( )** as the property value. 
+A simple property can _reference_ another property by placing the referenced property name inside **%[ ]** as the property value. 
 
 Example:
 
 ~~~properties
-Usual-carer = %(Amanda)
+Usual-carer = %[Amanda]
 ~~~
 
 The property takes the value of the referenced property.
@@ -82,6 +82,8 @@ The character **%** in a property value can be written using **%%** to distingui
 
 A property belonging to a property set can be referenced using **:** to separate the property name from the set name.
 
+#### Inline reference
+
 If the referenced property is a simple property, its value can be combined with the property value.
 
 The text of the reference is replaced with the text of the referenced property value.
@@ -89,7 +91,7 @@ The text of the reference is replaced with the text of the referenced property v
 Example:
 
 ~~~properties
-Badge = RMD-%(Profile:Usual-carer:Employee-id)
+Badge = RMD-%[Profile:Usual-carer:Employee-id]
 ~~~
 
 ### Complex properties 
@@ -114,7 +116,7 @@ Example:
 ~~~properties
 [Profile]
 Favourite-food = baby leaf
-Usual-carer = %(Amanda)
+Usual-carer = %[Amanda]
 ~~~
 
 #### Array
