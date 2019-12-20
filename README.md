@@ -77,7 +77,7 @@ If the referenced property is a simple property, its value can be combined with 
 Example:
 
 ~~~properties
-Badge = RMD-%(Amanda:Employee-id)
+Badge = RMD-%(Profile:Usual-carer:Employee-id)
 ~~~
 
 ### Complex properties 
