@@ -36,15 +36,15 @@ The syntax of INIT is different. If you like it, use it – or else don't.
 
 ## Structure
 
-An INIT document contains _properties_.
+_An INIT document contains_ properties.
 
-They are organised as a list of _simple_ properties followed by _complex_ properties. 
+_They are organised as a list of_ simple _properties followed by_ complex _properties. 
 
-A simple property can _reference_ a complex property or another simple property.
+_A simple property can_ reference _a complex property or another simple property._
 
-Whole-line _comments_ are allowed.
+_Whole-line_ comments _are allowed._
 
-The _type_ of the properties is defined externally. 
+_The_ type _of the properties is defined externally._
 
 ### Simple properties
 
