@@ -13,7 +13,7 @@ Name = Vel
 
 [Profile]
 Favourite-food = baby leaf
-Usual-carer := Amanda
+Usual-carer = %(Amanda)
 
 [Amanda]
 Name = Amanda Wall
@@ -50,23 +50,35 @@ Example:
 Animal = tortoise
 ~~~
 
-The property name can be pretty much anything, as long as it doesn't contain **=**, start with **[** or **;** or end with **:**. 
+The property name can be pretty much anything as long as it doesn't contain **=**, **:**, start with **[** or **;**.
 
-The property value can also be anything as long as it is on a single line. 
+The property value can be anything as long as it is on a single line. 
 
 White space around the property name is trimmed. White space around a property value is also trimmed for the default property type. 
 
 #### Reference
 
-A simple property can _reference_ another property by replacing **=** with **:=** and writing the name of the referenced property as the property value. 
+A simple property can _reference_ another property by placing the referenced property name inside **%( )** and using it as the property value. 
 
 Example:
 
 ~~~properties
-Usual-carer := Amanda
+Usual-carer = %(Amanda)
 ~~~
 
+The **%** character in a property value can be escaped using **%%**.
+
+A property belonging to a property set can be referenced using **:** to separate the property name from the set name.
+
 The property takes the value of the referenced property. This is particularly useful for inserting a complex property in the middle of simple properties.
+
+If the referenced property is a simple property, its value can be combined with the property value. The text of the reference is replaced with the text of the referenced property value.
+
+Example:
+
+~~~properties
+Badge = RMD-%(Amanda:Employee-id)
+~~~
 
 ### Complex properties 
 
@@ -88,7 +100,7 @@ Example:
 ~~~properties
 [Profile]
 Favourite-food = baby leaf
-Usual-carer := Amanda
+Usual-carer = %(Amanda)
 ~~~
 
 #### Array
