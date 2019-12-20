@@ -58,7 +58,7 @@ White space around the property name is trimmed. White space around a property v
 
 #### Reference
 
-A simple property can _reference_ another property by placing the referenced property name inside **%( )** and using it as the property value. 
+A simple property can _reference_ another property by placing the referenced property name inside **%( )** as the property value. 
 
 Example:
 
@@ -66,11 +66,11 @@ Example:
 Usual-carer = %(Amanda)
 ~~~
 
-The **%** character in a property value can be escaped using **%%**.
+The property takes the value of the referenced property. This is particularly useful for inserting a complex property in the middle of simple properties.
+
+The character **%** in a property value can be written using **%%** to distinguish it from a reference.
 
 A property belonging to a property set can be referenced using **:** to separate the property name from the set name.
-
-The property takes the value of the referenced property. This is particularly useful for inserting a complex property in the middle of simple properties.
 
 If the referenced property is a simple property, its value can be combined with the property value. The text of the reference is replaced with the text of the referenced property value.
 
