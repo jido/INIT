@@ -1,5 +1,7 @@
 # INIT
-INformation Interchange using Text
+**INformation Interchange using Text**
+
+---
 
 INIT is a human-readable data serialisation and exchange format. 
 
@@ -30,9 +32,13 @@ There are already good choices; in many places XML and JSON are prevalent. For d
 
 The syntax of INIT is different. If you like it, use it – or else don't. 
 
+---
+
 ## Structure
 
-An INIT document contains _properties_ organised as a list of _simple_ properties followed by _complex_ properties. 
+An INIT document contains _properties_.
+
+They are organised as a list of _simple_ properties followed by _complex_ properties. 
 
 A simple property can _reference_ a complex property or another simple property.
 
@@ -54,7 +60,9 @@ The property name can be pretty much anything as long as it doesn't contain **=*
 
 The property value can be anything as long as it is on a single line. 
 
-White space around the property name is trimmed. White space around a property value is also trimmed for the default property type. 
+White space around the property name is trimmed.
+
+White space around a property value is also trimmed for the default property type. 
 
 #### Reference
 
@@ -66,13 +74,17 @@ Example:
 Usual-carer = %(Amanda)
 ~~~
 
-The property takes the value of the referenced property. This is particularly useful for inserting a complex property in the middle of simple properties.
+The property takes the value of the referenced property.
+
+> **NOTE:** This is particularly useful for inserting a complex property in the middle of simple properties.
 
 The character **%** in a property value can be written using **%%** to distinguish it from a reference.
 
 A property belonging to a property set can be referenced using **:** to separate the property name from the set name.
 
-If the referenced property is a simple property, its value can be combined with the property value. The text of the reference is replaced with the text of the referenced property value.
+If the referenced property is a simple property, its value can be combined with the property value.
+
+The text of the reference is replaced with the text of the referenced property value.
 
 Example:
 
@@ -84,7 +96,9 @@ Badge = RMD-%(Profile:Usual-carer:Employee-id)
 
 If more than one line is required to define the property value, that property is written as a complex property. 
 
-A complex property is written as the property name inside square brackets **[ ]** on a line of its own. Its value follows below. 
+A complex property is written as the property name inside square brackets **[ ]** on a line of its own. 
+
+Its value follows below. 
 
 Example:
 ~~~properties
@@ -118,9 +132,11 @@ Example:
 3 = 2019-09-17 08:02
 ~~~
 
-If the array is multi dimensional, the indices are separated with **.**
+> **NOTE:** If the array is multi dimensional, the indices are separated with **.**
 
-To simplify the writing of index numbers, a number can be replaced with a dot (**.**) to indicate the next index in the sequence. For a multi dimensional array, only the last index is incremented. 
+To simplify the writing of index numbers, a number can be replaced with a dot (**.**) to indicate the next index in the sequence.
+
+For a multi dimensional array, only the last index is incremented. 
 
 Example:
 
