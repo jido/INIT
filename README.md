@@ -117,9 +117,9 @@ Usual-carer = %[Amanda]
 
 #### Array
 
-Property values arranged as a sequence or as a multi-dimensional table are written as an _array_. 
+An _array_ contains property values arranged as a sequence or as a multi-dimensional table. 
 
-In an array, property names are replaced with numbers that denote the index of the property. 
+Property names are replaced with numbers that denote the index of the value. 
 
 Example:
 
