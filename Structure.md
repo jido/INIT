@@ -162,4 +162,4 @@ Example:
 [[vetfile.config]]
 ~~~
 
-If no configuration file is loaded, the [default configuration](Configuration.md) applies.
+If no configuration file is loaded, the [default configuration](Configuration.md) is used.
