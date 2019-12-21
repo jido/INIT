@@ -50,8 +50,8 @@ The syntax of INIT is different. If you like it, use it – or else don't.
 
 ## Configuration
 
-* _An INIT document can load its configuration from an external_ configuration file.
-* _Any number of configuration files can be_ loaded _for the document._
+* _An INIT document can_ load _its configuration from an external file._
+* _Any number of_ configuration files _can be loaded for the document._
 * _The configuration defines_ document options.
 * _The configuration describes the_ type schema.
 * _The configuration_ pre-defines _hidden properties._
