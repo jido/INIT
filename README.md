@@ -40,9 +40,18 @@ The syntax of INIT is different. If you like it, use it – or else don't.
 
 * _An INIT document contains_ properties.
 * _They are organised as a list of_ simple _properties followed by_ complex _properties._ 
-* _A simple property can_ reference _a complex property or another simple property._
+* _A property can_ reference _another property._
 * _Whole-line_ comments _are allowed._
 * _The_ type _of the properties is defined externally._
-* _Any number of_ configuration files _can be loaded for the document._
 
 [More information about the structure](Structure.md)
+
+## Configuration
+
+* _An INIT document can load its configuration from an external_ configuration file.
+* _Any number of configuration files can be loaded for the document._
+* _The configuration defines_ document options.
+* _The configuration describes the_ type schema.
+* _The configuration_ pre-defines _hidden properties._
+
+[More information about configuration files](Configuration.md)
