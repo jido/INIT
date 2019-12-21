@@ -35,7 +35,7 @@ Employee-id = required integer
 
 The configuration options control the INIT file output.
 
-| Option | Default value | Possible values | Description | Notes |
+| _Option_ | _Default value_ | _Possible values_ | _Description_ | _Notes_ |
 |-|-|-|-|-|
 | CaseSensitiveNames | false | true false | controls if property names are case sensitive | if false the case is preserved but ignored |
 | AllowRoundBrackets | false | true false | if true, references can be written **%( )** | this implies property names should not contain **)** or start with **(** |
