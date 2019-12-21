@@ -46,10 +46,12 @@ The syntax of INIT is different. If you like it, use it – or else don't.
 
 [More information about the structure](Structure.md)
 
+---
+
 ## Configuration
 
 * _An INIT document can load its configuration from an external_ configuration file.
-* _Any number of configuration files can be loaded for the document._
+* _Any number of configuration files can be_ loaded _for the document._
 * _The configuration defines_ document options.
 * _The configuration describes the_ type schema.
 * _The configuration_ pre-defines _hidden properties._
