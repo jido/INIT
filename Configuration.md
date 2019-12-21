@@ -37,12 +37,12 @@ The configuration options control the INIT file output.
 
 | _Option_ | _Default value_ | _Possible values_ | _Description_ | _Notes_ |
 |-|-|-|-|-|
-| AllowRoundBrackets | false | true false | if true, references can be written **%( )** | this implies property names should not contain **)** or start with **(** |
+| AllowRoundBrackets | false | true false | controls if references can be written **%( )** | implies property names can't contain **)** or start with **(** |
 | CaseSensitiveNames | false | true false | controls if property names are case sensitive | if false the case is preserved but ignored |
-| DefaultPresence | optional | required optional | controls if properties are optional by default | |
+| DefaultPresence | optional | required optional | controls if properties are required or optional by default | |
 | DefaultTimeZone | +00:00 | a time zone offset | used for dates and times that don't specify a timezone | the date or time should be unambiguous |
 | DefaultType | any(text, array(text), set) | a type | the type of a property when not specified in the schema | |
-| HiddenPropertyWarning | warn | none warn error | controls how properties defined but not used are reported | if none a misspelt option is silently ignored |
+| HiddenPropertyWarning | warn | none warn error | controls how properties defined but not used are reported | if none, a misspelt option is silently ignored |
 | PrivatePropertyPrefix | | any valid name prefix | a prefix added to properties so they don't appear in the output | |
 
 ## Type schema
