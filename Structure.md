@@ -29,7 +29,7 @@ A simple property can _reference_ another property by placing the referenced pro
 Example:
 
 ~~~properties
-Usual-carer = %[Amanda]
+Usual-carer = %[ppAmanda]
 ~~~
 
 The property takes the value of the referenced property.
@@ -74,7 +74,7 @@ Its value follows below.
 
 Example:
 ~~~properties
-[Amanda]
+[ppAmanda]
 ~~~
 
 ### Property set
