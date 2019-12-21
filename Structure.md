@@ -161,3 +161,5 @@ Example:
 ~~~properties
 [[vetfile.config]]
 ~~~
+
+If no configuration file is loaded, the [default configuration](Configuration.md) applies.
