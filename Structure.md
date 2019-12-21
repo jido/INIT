@@ -52,6 +52,16 @@ Example:
 Badge = RMD-%[Profile:Usual-carer:Employee-id]
 ~~~
 
+If the referenced property is a property set, its set of properties can be merged with another set.
+
+If the referenced property is an array it can be extended with another array.
+
+Example:
+
+~~~properties
+FullAddress = %[Recipient] %[AddressLines] %[City]
+~~~
+
 ---
 
 ## Complex properties 
