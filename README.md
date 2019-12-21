@@ -17,9 +17,9 @@ Name = Vel
 
 [Profile]
 Favourite-food = baby leaf
-Usual-carer = %[Amanda]
+Usual-carer = %[ppAmanda]
 
-[Amanda]
+[ppAmanda]
 Name = Amanda Wall
 Employee-id = 351
 ~~~
