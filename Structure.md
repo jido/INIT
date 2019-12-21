@@ -149,5 +149,5 @@ To load a configuration file, put its name or URI inside **[[ ]]** at the beginn
 Example:
 
 ~~~properties
-[[vetfile.schema]]
+[[vetfile.config]]
 ~~~
