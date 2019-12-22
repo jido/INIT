@@ -84,7 +84,7 @@ The predefined types are:
 | raw | | some text | preserves all whitespace, multiline allowed using an array |
 | urlformdata | ReplacePlusSign | some text with characters encoded in URL format (**%XX**) | trimmed, encoded characters are replaced with their equivalent, if the option is set **+** is replaced with a space, multiline allowed using an array |
 | jsontext | | text inside quotes with characters encoded in JSON format (**\n...**) | the quotes are removed and encoded characters replaced with their equivalent, multiline allowed using an array with each line in quotes |
-| xmltext | | some text with characters encoded as XML entities (**&XXX;**) | encoded characters are replaced with their equivalent, multiline allowed using an array |
+| xmltext | | some text with characters encoded as XML entities (**&XXX;**) | trimmed, encoded characters are replaced with their equivalent, multiline allowed using an array |
 | base64 | | base-64 encoded data | can be split in multiple lines using an array, the data is decoded to binary format |
 | hex | | data encoded in hexadecimal | can be split in multiple lines using an array, the data is decoded to binary format |
 | number | Format="#.#E0" | a number with optional decimals, exponent and sign | |
