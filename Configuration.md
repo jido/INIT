@@ -42,7 +42,7 @@ The configuration options control the INIT file output.
 | DefaultPresence | optional | required optional | controls if properties are required or optional by default | |
 | DefaultTimeZone | +00:00 | a time zone offset | used for dates and times that don't specify a timezone | the date or time should be unambiguous |
 | DefaultType | any(text, array(text), set) | a type | the type of a property when not specified in the schema | |
-| HiddenPropertyWarning | warn | none warn error | controls how properties defined but not used are reported | if none, a misspelt option is silently ignored |
+| HiddenPropertyWarning | warn | none warn error | controls how properties defined but not used are reported | if none, a misspelled option is silently ignored |
 | PrivatePropertyPrefix | | any valid name prefix | a prefix added to properties so they don't appear in the output | |
 
 ## Type schema
@@ -81,14 +81,14 @@ The predefined types are:
 | raw | | some text | preserves all whitespace |
 | urlformdata | ReplacePlusSign | some trimmed text with characters encoded in URL format (**%XX**) | encoded characters are replaced with their equivalent, if the option is set **+** is replaced with a space |
 | jsontext | | quoted text with characters encoded in JSON format (**\n...**) | the quotes are removed and encoded characters replaced with their equivalent |
-| xmltext |
-| base64 |
-| number |
-| integer |
-| datetime |
-| date |
-| time |
-
+| xmltext | | some trimmed text with characters encoded as XML entities (**&XXX;**) | encoded characters are replaced with their equivalent |
+| base64 | | base-64 encoded data | the data is decoded to binary format |
+| number | Format="#.#E0" | a number with optional decimals, exponent and sign | |
+| integer | | a signed integer number | |
+| datetime | Format="YYYY-MM-DD hh:mm:ss.SSSZ" | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set |
+| date | Format="YYYY-MM-DD" | a date | |
+| time | Format="hh:mm:ss.SSSZ" | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
+| duration | Format="hh:mm:ss.SSS" | a duration | |
 
 ## Hidden properties
 
