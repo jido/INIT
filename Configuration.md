@@ -105,14 +105,14 @@ The predefined types are:
 | choice | a list of values or the name of a property set | a property that can take specific values | if one parameter, it is a property set, and synonyms can be defined using **InputValue = OutputValue** |
 | text | | some text | leading and trailing whitespace is trimmed, if the value is an array instead, it is interpreted as multiline text |
 | raw | | some text | preserves all whitespace, multiline allowed using an array |
-| urlformdata | ReplacePlusSign | some text with characters encoded in URL format (**%XX**) | trimmed, encoded characters are replaced with their equivalent, if the option is set **+** is replaced with a space, multiline allowed using an array |
+| urlformdata | ReplacePlusSign | some text with characters encoded in URL format (**%XX**) | text is trimmed, encoded characters are replaced with their equivalent, if the option is set **+** is replaced with a space, multiline allowed using an array |
 | jsontext | | text inside quotes with characters encoded in JSON format (**\n...**) | the quotes are removed and encoded characters replaced with their equivalent, multiline allowed using an array with each line in quotes |
-| xmltext | | some text with characters encoded as XML entities (**&XXX;**) | trimmed, encoded characters are replaced with their equivalent, multiline allowed using an array |
+| xmltext | | some text with characters encoded as XML entities (**&XXX;**) | text is trimmed, encoded characters are replaced with their equivalent, multiline allowed using an array |
 | base64 | | base-64 encoded data | can be split in multiple lines using an array, the data is decoded to binary format |
 | hex | | data encoded in hexadecimal | can be split in multiple lines using an array, the data is decoded to binary format |
 | number | Format="#.#E0" | a number with optional decimals, exponent and sign | |
 | integer | | a signed integer number | |
-| datetime | Format= "YYYY-MM-DD HH:mm:ss.SSSZ" TimeZone= _DefaultTimeZone_ | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set |
+| datetime | Format= "YYYY-MM-DD HH:mm:ss.SSSZ" TimeZone= _DefaultTimeZone_ | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set (_not_ local timezone) |
 | date | Format= "YYYY-MM-DD" | a date | |
 | time | Format= "HH:mm:ss.SSSZ" TimeZone= _DefaultTimeZone_ | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
 | duration | Format= "H:mm:ss.SSS" | a duration | missing components are set to 0 |
