@@ -55,6 +55,41 @@ Type declaration:
 (required|optional)? $type (\($parameters...\))? (host type $original_type)? (default=$value...)?
 ~~~
 
+Example:
+
+~~~properties
+Name = required text
+~~~
+
+Custom types are written as the name of a top-level property. The property value should be a type or a property set containing type declarations.
+
+Example:
+
+~~~properties
+Usual-carer = CarerProperties
+
+[CarerProperties]
+Name = required text
+Employee-id = required integer
+~~~
+
+The predefined types are:
+
+| _Type_ | _Parameters_ | _Description_ | _Comments_ |
+|-|-|-|-|
+| text | | some text with leading and trailing whitespace trimmed | if the value is an array instead, it is interpreted as multiline text |
+| raw | | some text | preserves all whitespace |
+| urlformdata | ReplacePlusSign | some trimmed text with characters encoded in URL format (**%XX**) | encoded characters are replaced with their equivalent, if the option is set **+** is replaced with a space |
+| jsontext | | quoted text with characters encoded in JSON format (**\n...**) | the quotes are removed and encoded characters replaced with their equivalent |
+| xmltext |
+| base64 |
+| number |
+| integer |
+| datetime |
+| date |
+| time |
+
+
 ## Hidden properties
 
 Properties which are defined in the configuration file but not used can be referenced as hidden properties in the INIT file.
