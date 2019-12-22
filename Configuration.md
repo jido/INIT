@@ -89,10 +89,11 @@ The predefined types are:
 | hex | | data encoded in hexadecimal | can be split in multiple lines using an array, the data is decoded to binary format |
 | number | Format="#.#E0" | a number with optional decimals, exponent and sign | |
 | integer | | a signed integer number | |
-| datetime | Format= "YYYY-MM-DD HH:mm:ss.SSSZ" | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set |
+| datetime | Format= "YYYY-MM-DD HH:mm:ss.SSSZ" TimeZone= DefaultTimeZone | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set |
 | date | Format= "YYYY-MM-DD" | a date | |
-| time | Format= "HH:mm:ss.SSSZ" | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
+| time | Format= "HH:mm:ss.SSSZ" TimeZone= DefaultTimeZone | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
 | duration | Format= "H:mm:ss.SSS" | a duration | missing components are set to 0 |
+| choice | a list of values or the name of a property set | a property that can take specific values | if a property set, synonyms can be defined using **InputValue = OutputValue** |
 
 ## Hidden properties
 
