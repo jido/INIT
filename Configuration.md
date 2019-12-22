@@ -77,6 +77,9 @@ The predefined types are:
 
 | _Type_ | _Parameters_ | _Description_ | _Comments_ |
 |-|-|-|-|
+| any | a list of types | allows any of the listed types (all type if not set) | |
+| set | | a property set | it is generally preferable to use a custom type instead of **set** |
+| array | a type | an array containing elements of the specified type | |
 | text | | some text with leading and trailing whitespace trimmed | if the value is an array instead, it is interpreted as multiline text |
 | raw | | some text | preserves all whitespace |
 | urlformdata | ReplacePlusSign | some trimmed text with characters encoded in URL format (**%XX**) | encoded characters are replaced with their equivalent, if the option is set **+** is replaced with a space |
