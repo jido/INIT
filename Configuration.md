@@ -63,6 +63,8 @@ Example:
 Name = required text
 ~~~
 
+The modifiers are:
+
 | _Modifier_ | _Use_ |
 |-|-|
 | `case (sensitive\|insensitive)` | controls if the property names of a set or the values in a choice are case sensitive |
