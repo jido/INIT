@@ -80,13 +80,13 @@ The predefined types are:
 | any | a list of types | allows any of the listed types (all types if no parameter) | |
 | set | | a property set | it is generally preferable to use a custom type instead of **set** |
 | array | a type | an array containing elements with the specified type | |
-| text | | some text with leading and trailing whitespace trimmed | if the value is an array instead, it is interpreted as multiline text |
+| text | | some text | leading and trailing whitespace is trimmed, if the value is an array instead, it is interpreted as multiline text |
 | raw | | some text | preserves all whitespace, multiline allowed using an array |
-| urlformdata | ReplacePlusSign | some trimmed text with characters encoded in URL format (**%XX**) | encoded characters are replaced with their equivalent, if the option is set **+** is replaced with a space, multiline allowed using an array |
+| urlformdata | ReplacePlusSign | some text with characters encoded in URL format (**%XX**) | trimmed, encoded characters are replaced with their equivalent, if the option is set **+** is replaced with a space, multiline allowed using an array |
 | jsontext | | text inside quotes with characters encoded in JSON format (**\n...**) | the quotes are removed and encoded characters replaced with their equivalent, multiline allowed using an array with each line in quotes |
-| xmltext | | some trimmed text with characters encoded as XML entities (**&XXX;**) | encoded characters are replaced with their equivalent, multiline allowed using an array |
-| base64 | | base-64 encoded data | the data is decoded to binary format, can be split in multiple lines using an array |
-| hex | | data encoded in hexadecimal | the data is decoded to binary format, can be split in multiple lines using an array |
+| xmltext | | some text with characters encoded as XML entities (**&XXX;**) | encoded characters are replaced with their equivalent, multiline allowed using an array |
+| base64 | | base-64 encoded data | can be split in multiple lines using an array, the data is decoded to binary format |
+| hex | | data encoded in hexadecimal | can be split in multiple lines using an array, the data is decoded to binary format |
 | number | Format="#.#E0" | a number with optional decimals, exponent and sign | |
 | integer | | a signed integer number | |
 | datetime | Format= "YYYY-MM-DD hh:mm:ss.SSSZ" | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set |
