@@ -52,7 +52,7 @@ The _Types_ property set in the configuration file controls the type of properti
 Type declaration:
 
 ~~~regex
-(required|optional)? $type (\($parameters...\))? (host type $original_type)? (default=$value...)?
+(required|optional)? $type ( \($parameters...\) )? (host type $original_type)? (default=$value...)?
 ~~~
 
 Example:
@@ -89,10 +89,10 @@ The predefined types are:
 | hex | | data encoded in hexadecimal | can be split in multiple lines using an array, the data is decoded to binary format |
 | number | Format="#.#E0" | a number with optional decimals, exponent and sign | |
 | integer | | a signed integer number | |
-| datetime | Format= "YYYY-MM-DD hh:mm:ss.SSSZ" | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set |
+| datetime | Format= "YYYY-MM-DD HH:mm:ss.SSSZ" | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set |
 | date | Format= "YYYY-MM-DD" | a date | |
-| time | Format= "hh:mm:ss.SSSZ" | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
-| duration | Format= "hh:mm:ss.SSS" | a duration | missing components are set to 0 |
+| time | Format= "HH:mm:ss.SSSZ" | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
+| duration | Format= "H:mm:ss.SSS" | a duration | missing components are set to 0 |
 
 ## Hidden properties
 
