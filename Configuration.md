@@ -45,6 +45,8 @@ The configuration options control the INIT file output.
 | HiddenPropertyWarning | warn | none warn error | controls how properties defined but not used are reported | if none, a misspelled option is silently ignored |
 | PrivatePropertyPrefix | | any valid name prefix | a prefix added to properties so they don't appear in the output | |
 
+---
+
 ## Type schema
 
 The _Types_ property set in the configuration file controls the type of properties in the INIT document.
@@ -61,9 +63,9 @@ Example:
 Name = required text
 ~~~
 
-| Modifier | Use |
+| _Modifier_ | _Use_ |
 |-|-|
-| `case (sensitive\|insensitive)` | controls if the property names of a set or the choice values are case sensitive |
+| `case (sensitive\|insensitive)` | controls if the property names of a set or the values in a choice are case sensitive |
 | `host type $original_type` | informs about the name of the type in the host programming language for better mapping |
 
 Example:
@@ -71,6 +73,8 @@ Example:
 ~~~properties
 ZooOwnership = choice(true, false) case sensitive host type boolean default=true
 ~~~
+
+### Custom types
 
 Custom types are written as the name of a top-level property. The property value should be a type or a property set containing type declarations.
 
@@ -84,13 +88,15 @@ Name = required text
 Employee-id = required integer
 ~~~
 
+### Predefined types
 The predefined types are:
 
 | _Type_ | _Parameters_ | _Description_ | _Comments_ |
 |-|-|-|-|
-| any | a list of types | allows any of the listed types (all types if no parameter) | |
+| any | a list of allowed types | can be any of the listed types (all types if no parameter) | |
 | set | | a property set | it is generally preferable to use a custom type instead of **set** |
 | array | a type | an array containing elements with the specified type | |
+| choice | a list of values or the name of a property set | a property that can take specific values | if one parameter, it is a property set, and synonyms can be defined using **InputValue = OutputValue** |
 | text | | some text | leading and trailing whitespace is trimmed, if the value is an array instead, it is interpreted as multiline text |
 | raw | | some text | preserves all whitespace, multiline allowed using an array |
 | urlformdata | ReplacePlusSign | some text with characters encoded in URL format (**%XX**) | trimmed, encoded characters are replaced with their equivalent, if the option is set **+** is replaced with a space, multiline allowed using an array |
@@ -104,7 +110,6 @@ The predefined types are:
 | date | Format= "YYYY-MM-DD" | a date | |
 | time | Format= "HH:mm:ss.SSSZ" TimeZone= DefaultTimeZone | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
 | duration | Format= "H:mm:ss.SSS" | a duration | missing components are set to 0 |
-| choice | a list of values or the name of a property set | a property that can take specific values | if one parameter, it is a property set, and synonyms can be defined using **InputValue = OutputValue** |
 
 ## Hidden properties
 
