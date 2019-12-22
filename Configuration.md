@@ -52,13 +52,24 @@ The _Types_ property set in the configuration file controls the type of properti
 Type declaration:
 
 ~~~regex
-(required|optional)? $type ( \($parameters...\) )? (host type $original_type)? (default=$value...)?
+(required|optional)? $type ( \($parameters...\) )? $modifiers (default=$value...)?
 ~~~
 
 Example:
 
 ~~~properties
 Name = required text
+~~~
+
+| Modifier | Use |
+|-|-|
+| `case (sensitive\|insensitive)` | controls if the property names of a set or the choice values are case sensitive |
+| `host type $original_type` | informs about the name of the type in the host programming language for better mapping |
+
+Example:
+
+~~~properties
+ZooOwnership = choice(true, false) case sensitive host type boolean default=true
 ~~~
 
 Custom types are written as the name of a top-level property. The property value should be a type or a property set containing type declarations.
@@ -93,7 +104,7 @@ The predefined types are:
 | date | Format= "YYYY-MM-DD" | a date | |
 | time | Format= "HH:mm:ss.SSSZ" TimeZone= DefaultTimeZone | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
 | duration | Format= "H:mm:ss.SSS" | a duration | missing components are set to 0 |
-| choice | a list of values or the name of a property set | a property that can take specific values | if a property set, synonyms can be defined using **InputValue = OutputValue** |
+| choice | a list of values or the name of a property set | a property that can take specific values | if one parameter, it is a property set, and synonyms can be defined using **InputValue = OutputValue** |
 
 ## Hidden properties
 
