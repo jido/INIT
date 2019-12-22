@@ -42,7 +42,7 @@ The configuration options control the INIT file output.
 | DefaultPresence | optional | required optional | controls if properties are required or optional by default | |
 | DefaultTimeZone | +00:00 | a time zone offset | used for dates and times that don't specify a timezone | the date or time should be unambiguous |
 | DefaultType | any(text, array(text), set) | a type | the type of a property when not specified in the schema | |
-| HiddenPropertyWarning | warn | none warn error | controls how properties defined but not used are reported | if none, a misspelled option is silently ignored |
+| UnknownOptionWarning | warn | none warn error | controls how unknown options and unused custom types are reported | if none, a misspelled option or a redundant custom type is silently ignored |
 | PrivatePropertyPrefix | | any valid name prefix | a prefix added to properties so they don't appear in the output | |
 
 ---
@@ -51,7 +51,7 @@ The configuration options control the INIT file output.
 
 The _Types_ property set in the configuration file controls the type of properties in the INIT document.
 
-Type declaration:
+Type declaration regular expression:
 
 ~~~regex
 (required|optional)? $type ( \($parameters...\) )? $modifiers
@@ -67,7 +67,7 @@ The modifiers are:
 
 | _Modifier_ | _Use_ |
 |-|-|
-| `case (sensitive\|insensitive)` | controls if the property names of a set or the values in a choice are case sensitive |
+| `case (sensitive\|insensitive)` | controls if the property names of a set or the values in a choice are case sensitive, the _CaseSensitiveNames_ option is used if not specified |
 | `host type $original_type` | informs about the name of the type in the host programming language for better type mapping |
 | `default=$value` | provides a default value, must come last and implies **optional** |
 
@@ -109,11 +109,20 @@ The predefined types are:
 | hex | | data encoded in hexadecimal | can be split in multiple lines using an array, the data is decoded to binary format |
 | number | Format="#.#E0" | a number with optional decimals, exponent and sign | |
 | integer | | a signed integer number | |
-| datetime | Format= "YYYY-MM-DD HH:mm:ss.SSSZ" TimeZone= DefaultTimeZone | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set |
+| datetime | Format= "YYYY-MM-DD HH:mm:ss.SSSZ" TimeZone= _DefaultTimeZone_ | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set |
 | date | Format= "YYYY-MM-DD" | a date | |
-| time | Format= "HH:mm:ss.SSSZ" TimeZone= DefaultTimeZone | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
+| time | Format= "HH:mm:ss.SSSZ" TimeZone= _DefaultTimeZone_ | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
 | duration | Format= "H:mm:ss.SSS" | a duration | missing components are set to 0 |
+
+---
 
 ## Hidden properties
 
-Properties which are defined in the configuration file but not used can be referenced as hidden properties in the INIT file.
+Properties in the _Global_ property set can be referenced as hidden properties in the INIT file.
+
+Example:
+
+~~~properties
+[Global]
+ContactLink = http://www.example.com/funtimezoo/contact.html
+~~~
