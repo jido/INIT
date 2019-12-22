@@ -54,7 +54,7 @@ The _Types_ property set in the configuration file controls the type of properti
 Type declaration:
 
 ~~~regex
-(required|optional)? $type ( \($parameters...\) )? $modifiers (default=$value...)?
+(required|optional)? $type ( \($parameters...\) )? $modifiers
 ~~~
 
 Example:
@@ -68,7 +68,8 @@ The modifiers are:
 | _Modifier_ | _Use_ |
 |-|-|
 | `case (sensitive\|insensitive)` | controls if the property names of a set or the values in a choice are case sensitive |
-| `host type $original_type` | informs about the name of the type in the host programming language for better mapping |
+| `host type $original_type` | informs about the name of the type in the host programming language for better type mapping |
+| `default=$value` | provides a default value, must come last and implies **optional** |
 
 Example:
 
