@@ -27,6 +27,9 @@ Usual-carer = CarerProperties
 [CarerProperties]
 Name = required text
 Employee-id = required integer
+
+[Global]
+ContactLink = http://www.example.com/funtimezoo/contact.html
 ~~~
 
 ---
