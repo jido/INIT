@@ -110,12 +110,12 @@ The predefined types are:
 | xmltext | | some text with characters encoded as XML entities (**&XXX;**) | text is trimmed, encoded characters are replaced with their equivalent, multiline allowed using an array |
 | base64 | | base-64 encoded data | can be split in multiple lines using an array, the data is decoded to binary format |
 | hex | | data encoded in hexadecimal | can be split in multiple lines using an array, the data is decoded to binary format |
-| number | Format="#.#E0" | a number with optional decimals, exponent and sign | |
+| number | Format=`"#.#E0"` | a number with optional decimals, exponent and sign | |
 | integer | | a signed integer number | |
-| datetime | Format= "YYYY-MM-DD HH:mm:ss.SSSZ" TimeZone= _DefaultTimeZone_ | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set (_not_ local timezone) |
-| date | Format= "YYYY-MM-DD" | a date | |
-| time | Format= "HH:mm:ss.SSSZ" TimeZone= _DefaultTimeZone_ | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
-| duration | Format= "H:m:s.SSS" | a duration | missing components are set to 0 |
+| datetime | Format= `"YYYY-MM-DD HH:mm:ss.SSSZ"` TimeZone= _DefaultTimeZone_ | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set (_not_ local timezone) |
+| date | Format= `"YYYY-MM-DD"` | a date | |
+| time | Format= `"HH:mm:ss.SSSZ"` TimeZone= _DefaultTimeZone_ | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
+| duration | Format= `"H:m:s.SSS"` | a duration | missing components are set to 0 |
 
 ---
 
