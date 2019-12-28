@@ -71,13 +71,13 @@ The modifiers are:
 | _Modifier_ | _Use_ |
 |-|-|
 | `case (sensitive\|insensitive)` | controls if the property names of a set or the values in a choice are case sensitive, the _CaseSensitiveNames_ option is used if not specified |
-| `host type $original_type` | informs about the name of the type in the host programming language for better type mapping |
+| `native type $original_type` | informs about the name of the type in the host programming language for better type mapping |
 | `default=$value` | provides a default value, must come last and implies **optional** |
 
 Example:
 
 ~~~properties
-ZooOwnership = choice(true, false) case sensitive host type boolean default=true
+ZooOwnership = choice(true, false) case sensitive native type boolean default=true
 ~~~
 
 ### Custom types
@@ -115,7 +115,7 @@ The predefined types are:
 | datetime | Format= "YYYY-MM-DD HH:mm:ss.SSSZ" TimeZone= _DefaultTimeZone_ | a date and time | the time components that are missing are set to 0, default timezone used if no timezone set (_not_ local timezone) |
 | date | Format= "YYYY-MM-DD" | a date | |
 | time | Format= "HH:mm:ss.SSSZ" TimeZone= _DefaultTimeZone_ | a time | missing components are set to 0, default timezone used if no timezone set (_not_ local timezone) |
-| duration | Format= "H:mm:ss.SSS" | a duration | missing components are set to 0 |
+| duration | Format= "H:m:s.SSS" | a duration | missing components are set to 0 |
 
 ---
 
