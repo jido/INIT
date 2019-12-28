@@ -14,7 +14,7 @@ Example:
 Animal = tortoise
 ~~~
 
-The property name can be pretty much anything as long as it doesn't contain **=**, **:**, start with **[** or **;**.
+The property name can be pretty much anything as long as it doesn't contain **=**, **:**, **]** start with **[** or **;**.
 
 The property value can be anything as long as it is on a single line. 
 
@@ -86,7 +86,7 @@ Example:
 ~~~properties
 [Profile]
 Favourite-food = baby leaf
-Usual-carer = %[Amanda]
+Usual-carer = %[ppAmanda]
 ~~~
 
 ### Array
