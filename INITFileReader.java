@@ -6,12 +6,12 @@ import java.io.FileReader;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public class INITFileReader {
 
     final static Pattern nonspace = Pattern.compile("\\S\\[?");
     
-    // pour les qu'ont un vieux Java (moi!)
     String strip(String s) {
         return s.replace("^\\s*", "").replace("\\s*$", "");
     }
@@ -28,8 +28,8 @@ public class INITFileReader {
             source = new BufferedReader(reader);
         }
         String line;
-        HashMap doc = new HashMap();
-        HashMap current = doc;
+        HashMap<String, Object> doc = new HashMap<String, Object>();
+        HashMap<String, Object> current = doc;
         do
         {
             try {
@@ -50,14 +50,14 @@ public class INITFileReader {
                         break;
                      
                         case "[[":
-                        int closingBracket = line.indexOf(']', macha.end());
+                        int closingBracket = line.indexOf("]]", macha.end());
                         System.out.println("CONFIG " + line.substring(macha.end(), closingBracket));
                         break;
                      
                         case "[":
                         closingBracket = line.indexOf(']', macha.end());
                         String setName = strip(line.substring(macha.end(), closingBracket));
-                        current = new HashMap();
+                        current = new HashMap<String, Object>();
                         doc.put(setName, current);
                         break;
                      
@@ -70,7 +70,7 @@ public class INITFileReader {
                 }
             }
         } while (line != null);
-        for (Object key: doc.keySet())
+        for (String key: new TreeSet<String>(doc.keySet()))
         {
             Object valu = doc.get(key);
             if (valu instanceof String)
@@ -81,10 +81,44 @@ public class INITFileReader {
             else
             {
                 System.out.println("\nSET " + key);
-                current = (HashMap) valu;
-                for (Object skey: current.keySet())
+                current = (HashMap<String, Object>) valu;
+                for (String skey: current.keySet())
                 {
                     Object svalu = current.get(skey);
+                    String text = (String) svalu;
+                    int refi = text.indexOf("%[");
+                    while (refi >= 0)
+                    {
+                        int x = refi;
+                        while (x >= 1 && text.charAt(x - 1) == '%')
+                        {
+                            --x;
+                        }
+                        int xx = 0;
+                        if (x != refi)
+                        {
+                            // Get rid of half the escaped % characters
+                            xx = (refi - x) % 2;
+                            int y = x + (refi - x) / 2;
+                            text = text.substring(0, y) + text.substring(refi);
+                            svalu = text;
+                            refi = y;
+                        }
+                        if (xx == 0)
+                        {
+                            int refEndi = text.indexOf(']', refi);
+                            if (refEndi == -1)
+                            {
+                                System.err.println("INVALID REFERENCE " + text.substring(refi));
+                            }
+                            else
+                            {
+                                String ref = strip(text.substring(refi + 2, refEndi));
+                                System.out.println("REFERENCE " + ref);
+                            }
+                        }
+                        refi = text.indexOf("%[", refi + 1);
+                    }
                     System.out.println("SET PROPERTY " + skey);
                     System.out.println("     value=" + svalu);
                 }                
