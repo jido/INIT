@@ -82,7 +82,7 @@ public class INITFileReader {
             {
                 System.out.println("\nSET " + key);
                 current = (HashMap<String, Object>) valu;
-                for (String skey: current.keySet())
+                for (String skey: new TreeSet<String>(current.keySet()))
                 {
                     Object svalu = current.get(skey);
                     String text = (String) svalu;
