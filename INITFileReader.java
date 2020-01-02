@@ -102,30 +102,19 @@ public class INITFileReader {
                         break;
                      
                         case "[":
-                        if (current == null)
-                        {
-                            doc.put(setName, new HashMap<String, Object>());
-                        }
                         closingBracket = line.indexOf(']', macha.end());
                         setName = strip(line.substring(macha.end(), closingBracket));
-                        current = null;
+                        current = new HashMap<String, Object>();
+                        doc.put(setName, current);
                         break;
                      
                         default:
                         int equals = line.indexOf('=');
                         String propertyName = strip(line.substring(0, equals));
                         String value = line.substring(equals + 1);
-                        if (current == null)
+                        if (setName != null && current.size() == 0 && indices.matcher(propertyName).matches())
                         {
-                            if (indices.matcher(propertyName).matches())
-                            {
-                                System.out.println("Got an array! " + propertyName);
-                                current = new ArrayMap<Object>();                            
-                            }
-                            else
-                            {
-                                current = new HashMap<String, Object>();
-                            }
+                            current = new ArrayMap<Object>();
                             doc.put(setName, current);
                         }
                         current.put(propertyName, value);
