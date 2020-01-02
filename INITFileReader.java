@@ -13,7 +13,7 @@ public class INITFileReader {
     final static Pattern nonspace = Pattern.compile("\\S\\[?");
     
     String strip(String s) {
-        return s.replace("^\\s*", "").replace("\\s*$", "");
+        return s.replaceAll("^\\s*", "").replaceAll("\\s*$", "");
     }
     
     
@@ -84,8 +84,11 @@ public class INITFileReader {
                 current = (HashMap<String, Object>) valu;
                 for (String skey: new TreeSet<String>(current.keySet()))
                 {
+                    System.out.println("SET PROPERTY " + skey);
                     Object svalu = current.get(skey);
                     String text = (String) svalu;
+                    String prefix = "";
+                    int refEndi = -1;
                     int refi = text.indexOf("%[");
                     while (refi >= 0)
                     {
@@ -97,26 +100,55 @@ public class INITFileReader {
                         {
                             if (text.charAt(refi + 2) != ';')
                             {
-                                int refEndi = text.indexOf(']', refi);
+                                prefix = prefix + text.substring(refEndi + 1, refi);
+                                refEndi = text.indexOf(']', refi);
+                                String ref;
                                 if (refEndi == -1)
                                 {
                                     System.err.println("INVALID REFERENCE " + text.substring(refi));
                                 }
                                 else
                                 {
-                                    String ref = strip(text.substring(refi + 2, refEndi));
-                                    System.out.println("REFERENCE " + ref);
+                                    ref = strip(text.substring(refi + 2, refEndi));
+                                    Object pvalue = doc.get(ref);
+                                    if (pvalue == null)
+                                    {
+                                        System.err.println("UNKNOWN REFERENCE " + ref);
+                                    }
+                                    else
+                                    {
+                                        System.out.println("REFERENCE " + ref);
+                                        if (svalu instanceof String && pvalue instanceof String)
+                                        {
+                                            System.out.println("Appending " + pvalue);
+                                            prefix = prefix + pvalue;
+                                        }
+                                        if (svalu instanceof String && pvalue instanceof HashMap)
+                                        {
+                                            svalu = pvalue;
+                                        }
+                                        if (svalu instanceof HashMap && pvalue instanceof HashMap)
+                                        {
+                                            HashMap<String, Object> copy = (HashMap<String, Object>) ((HashMap) svalu).clone();
+                                            copy.putAll((HashMap<String, Object>) pvalue);
+                                            svalu = copy;
+                                        }
+                                    }
                                 }
                             }
-                            else
+                            else if (svalu instanceof String)
                             {
-                                svalu = text.substring(0, refi + 2) + text.substring(refi + 3);
+                                prefix = prefix + text.substring(refEndi + 1, refi + 2);
+                                refEndi = refi + 2;
                             }
                         }
                         refi = text.indexOf("%[", refi + 1);
                     }
-                    System.out.println("SET PROPERTY " + skey);
-                    System.out.println("     value=" + svalu);
+                    if (svalu instanceof String)
+                    {
+                        svalu = prefix + (refEndi + 1 < text.length() ? text.substring(refEndi + 1) : "");
+                        System.out.println("     value=" + svalu);
+                    }
                 }                
             }
         }
