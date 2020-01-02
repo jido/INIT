@@ -36,7 +36,7 @@ The property takes the value of the referenced property.
 
 > **NOTE:** This is particularly useful for inserting a complex property in the middle of simple properties.
 
-The character **%** in a property value can be written using **%%** to distinguish it from a reference.
+If **;** is added after **%[**, it is ignored and not counted as reference.
 
 A property belonging to a property set can be referenced using **:** to separate the property name from the set name.
 

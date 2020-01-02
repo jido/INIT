@@ -89,32 +89,28 @@ public class INITFileReader {
                     int refi = text.indexOf("%[");
                     while (refi >= 0)
                     {
-                        int x = refi;
-                        while (x >= 1 && text.charAt(x - 1) == '%')
+                        if (text.length() < refi + 3)
                         {
-                            --x;
+                            System.err.println("Truncated value - did you forget a ';'? " + text);
                         }
-                        int xx = 0;
-                        if (x != refi)
+                        else
                         {
-                            // Get rid of half the escaped % characters
-                            xx = (refi - x) % 2;
-                            int y = x + (refi - x) / 2;
-                            text = text.substring(0, y) + text.substring(refi);
-                            svalu = text;
-                            refi = y;
-                        }
-                        if (xx == 0)
-                        {
-                            int refEndi = text.indexOf(']', refi);
-                            if (refEndi == -1)
+                            if (text.charAt(refi + 2) != ';')
                             {
-                                System.err.println("INVALID REFERENCE " + text.substring(refi));
+                                int refEndi = text.indexOf(']', refi);
+                                if (refEndi == -1)
+                                {
+                                    System.err.println("INVALID REFERENCE " + text.substring(refi));
+                                }
+                                else
+                                {
+                                    String ref = strip(text.substring(refi + 2, refEndi));
+                                    System.out.println("REFERENCE " + ref);
+                                }
                             }
                             else
                             {
-                                String ref = strip(text.substring(refi + 2, refEndi));
-                                System.out.println("REFERENCE " + ref);
+                                svalu = text.substring(0, refi + 2) + text.substring(refi + 3);
                             }
                         }
                         refi = text.indexOf("%[", refi + 1);
