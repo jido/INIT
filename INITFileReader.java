@@ -23,16 +23,54 @@ class ArrayMap<V> extends AbstractMap<String, V> {
         return new ArrayEntrySet();
     }
     public V put(String key, V value) {
-        if (".".equals(key))
+        if (contents.size() > 0)
         {
-            try {
-                String last = contents.get(contents.size() - 1).getKey();
-                int dot = last.lastIndexOf('.') + 1;
-                int num = Integer.parseInt(last.substring(dot));
-                key = last.substring(0, dot) + (num + 1);
+            String last = contents.get(contents.size() - 1).getKey();
+            if (".".equals(key))
+            {
+                try {
+                    int dot = last.lastIndexOf('.') + 1;
+                    int num = Integer.parseInt(last.substring(dot));
+                    key = last.substring(0, dot) + (num + 1);
+                }
+                catch (Exception e) {
+                    throw new IllegalArgumentException(e);
+                }
             }
-            catch (Exception e) {
-                throw new IllegalArgumentException(e);
+            else if (!INITFileReader.indices.matcher(key).matches())
+            {
+                throw new IllegalArgumentException("Invalid array indices: " + key);
+            }
+            else if (key == last)
+            {
+                throw new IllegalArgumentException("Found duplicate indices: " + key);
+            }
+            else
+            {
+                String[] keyIndex = key.split("\\.");
+                String[] lastIndex = last.split("\\.");
+                if (keyIndex.length != lastIndex.length)
+                {
+                    throw new IllegalArgumentException("Invalid number of indices: " + key +
+                        ": Expected " + keyIndex.length + ", got " + lastIndex.length);
+                }
+                int n = 0;
+                while (n < keyIndex.length && keyIndex[n] == lastIndex[n])
+                {
+                    ++n;
+                }
+                // since key != last we must have n < keyIndex.length
+                boolean ordered;
+                try {
+                    ordered = Integer.parseInt(keyIndex[n]) > Integer.parseInt(lastIndex[n]);
+                }
+                catch (Exception e) {
+                    throw new IllegalArgumentException(e);
+                }
+                if (!ordered)
+                {
+                    throw new IllegalArgumentException("Indices out of sequence: " + key);
+                }
             }
         }
         contents.add(new SimpleEntry<String, V>(key, value));
@@ -45,10 +83,6 @@ class ArrayMap<V> extends AbstractMap<String, V> {
         }
         public Iterator<Map.Entry<String, V> > iterator() {
             return contents.iterator();
-        }
-        public boolean add(Map.Entry<String, V> entry) {
-            contents.add(entry);
-            return true;
         }
     }
 }
