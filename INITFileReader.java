@@ -126,6 +126,7 @@ public class INITFileReader {
                 if (macha.find())
                 {
                     switch (macha.group()) {
+                        case ";[":
                         case ";":
                         System.out.println("COMMENT " + line.substring(macha.end()));
                         break;
@@ -144,6 +145,11 @@ public class INITFileReader {
                      
                         default:
                         int equals = line.indexOf('=');
+                        if (equals == -1)
+                        {
+                            System.err.println("Syntax error: missing '=' in: " + line);
+                            break;
+                        }
                         String propertyName = strip(line.substring(0, equals));
                         String value = line.substring(equals + 1);
                         if (setName != null && current.size() == 0 && indices.matcher(propertyName).matches())
