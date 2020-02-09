@@ -5,14 +5,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.TreeSet;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 class SimpleProperty {
     List<String> parts = new ArrayList<String>();
@@ -58,6 +54,18 @@ class SimpleProperty {
     @Override
     public String toString() {
         return String.join("$", parts);
+    }
+    
+    public int referenceCount() {
+        return parts.size() / 2;
+    }
+    
+    public String getReference(int n) {
+        return parts.get(1 + 2 * n);
+    }
+    
+    public String getText(int n) {
+        return parts.get(2 * n);
     }
 }
 
@@ -133,7 +141,7 @@ class ArrayNode {
             }
             else
             {
-                return last.key + last.add(index);
+                return last.key + "." + last.add(index);
             }
         }
         else if (!INITFileReader.indices.matcher(index).matches())
@@ -210,8 +218,11 @@ public class INITFileReader {
             source = new BufferedReader(reader);
         }
         String line;
-        Map<String, Object> doc = new HashMap<String, Object>();
-        Map<String, Object> current = doc;
+        Map<String, Map<String, SimpleProperty> > doc = new HashMap<String, Map<String, SimpleProperty> >();
+        Map<String, SimpleProperty> root, current;
+        root = new PropertySet("[root]");
+        current = root;
+        doc.put("", root);
         String setName = null;
         do
         {
@@ -230,122 +241,79 @@ public class INITFileReader {
                     switch (macha.group()) {
                         case ";[":
                         case ";":
-                        System.out.println("COMMENT " + line.substring(macha.end()));
-                        break;
+                            System.out.println("COMMENT " + line.substring(macha.end()));
+                            break;
                      
                         case "[[":
-                        int closingBracket = line.indexOf("]]", macha.end());
-                        System.out.println("CONFIG " + line.substring(macha.end(), closingBracket));
-                        break;
+                            int closingBracket = line.indexOf("]]", macha.end());
+                            System.out.println("CONFIG " + line.substring(macha.end(), closingBracket));
+                            break;
                      
                         case "[":
-                        closingBracket = line.indexOf(']', macha.end());
-                        setName = strip(line.substring(macha.end(), closingBracket));
-                        current = (Map) new PropertySet(setName);
-                        doc.put(setName, current);
-                        break;
+                            closingBracket = line.indexOf(']', macha.end());
+                            setName = strip(line.substring(macha.end(), closingBracket));
+                            current = new PropertySet(setName);
+                            doc.put(setName, current);
+                            break;
                      
                         default:
-                        int equals = line.indexOf('=');
-                        if (equals == -1)
-                        {
-                            System.err.println("Syntax error: missing '=' in: " + line);
-                            break;
-                        }
-                        String propertyName = strip(line.substring(0, equals));
-                        String value = line.substring(equals + 1);
-                        if (setName != null && current.size() == 0 && indices.matcher(propertyName).matches())
-                        {
-                            current = (Map) new PropertyArray(setName, propertyName, new SimpleProperty(value));
-                            doc.put(setName, current);
-                        }
-                        else
-                        {
-                            current.put(propertyName, new SimpleProperty(value));
-                        }
+                            int equals = line.indexOf('=');
+                            if (equals == -1)
+                            {
+                                System.err.println("Syntax error: missing '=' in: " + line);
+                                break;
+                            }
+                            String propertyName = strip(line.substring(0, equals));
+                            String value = line.substring(equals + 1);
+                            if (setName != null && current.size() == 0 && indices.matcher(propertyName).matches())
+                            {
+                                current = new PropertyArray(setName, propertyName, new SimpleProperty(value));
+                                doc.put(setName, current);
+                            }
+                            else
+                            {
+                                current.put(propertyName, new SimpleProperty(value));
+                            }
                     }
                 }
             }
         } while (line != null);
-        for (String key: new TreeSet<String>(doc.keySet()))
+        for (String key: doc.keySet())
         {
-            Object valu = doc.get(key);
-            if (valu instanceof SimpleProperty)
+            System.out.println("\nSET " + key);                
+            current = doc.get(key);
+            if (current instanceof PropertySet)
             {
-                System.out.println("\nPROPERTY " + key);
-                System.out.println(" value=" + valu);
-            }
-            else
-            {
-                System.out.println("\nSET " + key);
-                current = (Map<String, Object>) valu;
-                for (String skey: new TreeSet<String>(current.keySet()))
+                PropertySet value = (PropertySet) current;
+                for (String skey: value.keys)
                 {
                     System.out.println("SET PROPERTY " + skey);
-                    Object svalu = current.get(skey);
-                    String text = svalu.toString();
-                    String prefix = "";
-                    int refEndi = -1;
-                    int refi = text.indexOf("%[");
-                    while (refi >= 0)
+                    SimpleProperty svalue = current.get(skey);
+                    String text = svalue.getText(0);
+                    for (int ref = 0; ref < svalue.referenceCount(); ++ref)
                     {
-                        if (text.length() < refi + 3)
+                        String name = svalue.getReference(ref);
+                        SimpleProperty prop = root.get(name);
+                        if (prop == null)
                         {
-                            System.err.println("Truncated value - did you forget a ';'? " + text);
+                            Map<String, SimpleProperty> other = doc.get(name);
+                            if (other == null)
+                            {
+                                System.err.println("UNKNOWN REFERENCE " + name);
+                            }
+                            else
+                            {
+                                System.out.println("REFERENCE " + name);
+                                text += "%[" + name + "]";
+                            }
                         }
                         else
                         {
-                            if (text.charAt(refi + 2) != ';')
-                            {
-                                prefix = prefix + text.substring(refEndi + 1, refi);
-                                refEndi = text.indexOf(']', refi);
-                                String ref;
-                                if (refEndi == -1)
-                                {
-                                    System.err.println("INVALID REFERENCE " + text.substring(refi));
-                                }
-                                else
-                                {
-                                    ref = strip(text.substring(refi + 2, refEndi));
-                                    Object pvalue = doc.get(ref);
-                                    if (pvalue == null)
-                                    {
-                                        System.err.println("UNKNOWN REFERENCE " + ref);
-                                    }
-                                    else
-                                    {
-                                        System.out.println("REFERENCE " + ref);
-                                        if (svalu instanceof String && pvalue instanceof String)
-                                        {
-                                            System.out.println("Appending " + pvalue);
-                                            prefix = prefix + pvalue;
-                                        }
-                                        if (svalu instanceof String && pvalue instanceof Map)
-                                        {
-                                            svalu = pvalue;
-                                        } /*
-                                        if (svalu instanceof HashMap && pvalue instanceof HashMap)
-                                        {
-                                            HashMap<String, Object> copy = (HashMap<String, Object>) ((HashMap) svalu).clone();
-                                            copy.putAll((HashMap<String, Object>) pvalue);
-                                            svalu = copy;
-                                        }*/
-                                    }
-                                }
-                            }
-                            else if (svalu instanceof String)
-                            {
-                                prefix = prefix + text.substring(refEndi + 1, refi + 2);
-                                refEndi = refi + 2;
-                            }
+                            text += prop.toString();
                         }
-                        refi = text.indexOf("%[", refi + 1);
+                        text += svalue.getText(ref + 1);
                     }
-                    if (svalu instanceof String)
-                    {
-                        svalu = prefix + (refEndi + 1 < text.length() ? text.substring(refEndi + 1) : "");
-                        System.out.println("     value=" + svalu);
-                    }
+                    System.out.println("     value=" + text);
                 }                
             }
         }
