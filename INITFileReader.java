@@ -12,78 +12,180 @@ import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.List;
 
-class ArrayMap<V> extends AbstractMap<String, V> {
-    ArrayList<Map.Entry<String, V> > contents;
-    public ArrayMap()
-    {
-        contents = new ArrayList<Map.Entry<String, V> >();
-    }
-    public ArrayEntrySet entrySet() {
-        return new ArrayEntrySet();
-    }
-    public V put(String key, V value) {
-        if (contents.size() > 0)
+class SimpleProperty {
+    List<String> parts = new ArrayList<String>();
+    
+    public SimpleProperty(String text) {
+        int refEndi = -1;
+        int refi = text.indexOf("%[");
+        while (refi >= 0)
         {
-            String last = contents.get(contents.size() - 1).getKey();
-            if (".".equals(key))
+            if (text.length() < refi + 3)
             {
-                try {
-                    int dot = last.lastIndexOf('.') + 1;
-                    int num = Integer.parseInt(last.substring(dot));
-                    key = last.substring(0, dot) + (num + 1);
-                }
-                catch (Exception e) {
-                    throw new IllegalArgumentException(e);
-                }
-            }
-            else if (!INITFileReader.indices.matcher(key).matches())
-            {
-                throw new IllegalArgumentException("Invalid array indices: " + key);
-            }
-            else if (key == last)
-            {
-                throw new IllegalArgumentException("Found duplicate indices: " + key);
+                System.err.println("Truncated value - did you forget a ';'? " + text);
             }
             else
             {
-                String[] keyIndex = key.split("\\.");
-                String[] lastIndex = last.split("\\.");
-                if (keyIndex.length != lastIndex.length)
+                if (text.charAt(refi + 2) != ';')
                 {
-                    throw new IllegalArgumentException("Invalid number of indices: " + key +
-                        ": Expected " + keyIndex.length + ", got " + lastIndex.length);
+                    parts.add(text.substring(refEndi + 1, refi));
+                    refEndi = text.indexOf(']', refi);
+                    String ref;
+                    if (refEndi == -1)
+                    {
+                        System.err.println("UNENDED REFERENCE " + text.substring(refi));
+                    }
+                    else
+                    {
+                        ref = INITFileReader.strip(text.substring(refi + 2, refEndi));
+                        System.out.println("REFERENCE " + ref);
+                        parts.add(ref);
+                    }
                 }
-                int n = 0;
-                while (n < keyIndex.length && keyIndex[n] == lastIndex[n])
+                else
                 {
-                    ++n;
-                }
-                // since key != last we must have n < keyIndex.length
-                boolean ordered;
-                try {
-                    ordered = Integer.parseInt(keyIndex[n]) > Integer.parseInt(lastIndex[n]);
-                }
-                catch (Exception e) {
-                    throw new IllegalArgumentException(e);
-                }
-                if (!ordered)
-                {
-                    throw new IllegalArgumentException("Indices out of sequence: " + key);
+                    refEndi = refi + 2;
                 }
             }
+            refi = text.indexOf("%[", refi + 2);
         }
-        contents.add(new SimpleEntry<String, V>(key, value));
-        return null;
+        parts.add(refEndi + 1 < text.length() ? text.substring(refEndi + 1) : "");
+        System.out.println("     value=" + text);
     }
     
-    class ArrayEntrySet extends AbstractSet<Map.Entry<String, V> > {
-        public int size() {
-            return contents.size();
+    @Override
+    public String toString() {
+        return String.join("$", parts);
+    }
+}
+
+class PropertySet extends HashMap<String, SimpleProperty> {
+    List<String> keys = new ArrayList<String>();
+    String name;
+    
+    public PropertySet(String name) {
+        this.name = name;
+    }
+    
+    @Override
+    public SimpleProperty put(String key, SimpleProperty value) {
+        if (containsKey(key))
+        {
+            throw new IllegalArgumentException("Found duplicate property name: " + key + " in set: " + name);
         }
-        public Iterator<Map.Entry<String, V> > iterator() {
-            return contents.iterator();
+        super.put(key, value);
+        keys.add(key);
+        return null;
+    }
+}
+
+class ArrayNode {
+    String key;
+    List<ArrayNode> children;
+    
+    public ArrayNode(String key) {
+        this.key = key;
+    }
+    
+    public ArrayNode(String key, String childKey) {
+        this.key = key;
+        
+        children = new ArrayList<ArrayNode>();
+        int dot = childKey.indexOf('.') + 1;
+        if (dot == 0)
+        {
+            children.add(new ArrayNode(childKey));     // leaf
         }
+        else
+        {
+            children.add(new ArrayNode(childKey.substring(0, dot - 1), childKey.substring(dot)));   // subarray
+        }
+    }
+    
+    public boolean isLeaf() {
+        return children == null;
+    }
+    
+    public int index() {
+        try {
+            return Integer.parseInt(key);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    } 
+    
+    public String add(String index) {
+        if (isLeaf())
+        {
+            throw new RuntimeException("Unexpected error: adding child with index '" + index + "' in leaf: " + this.key);
+        }
+        else if (".".equals(index))
+        {
+            ArrayNode last = children.get(children.size() - 1);
+            if (last.isLeaf())
+            {
+                int num = last.index() + 1;
+                children.add(new ArrayNode("" + num));
+                return "" + num;
+            }
+            else
+            {
+                return last.key + last.add(index);
+            }
+        }
+        else if (!INITFileReader.indices.matcher(index).matches())
+        {
+            throw new IllegalArgumentException("Invalid array indices: " + index);
+        }
+        else
+        {
+            int dot = index.indexOf('.') + 1;
+            String key = index.substring(0, dot - 1);
+            String rest = index.substring(dot);
+            ArrayNode last = children.get(children.size() - 1);
+            
+            if (last.key.equals(key))
+            {
+                last.add(rest);         // add to existing child node
+            }
+            else
+            {
+                ArrayNode newChild;
+                if (dot == 0)
+                {
+                    newChild = new ArrayNode(index);        // leaf
+                }
+                else
+                {
+                    newChild = new ArrayNode(key, rest);    // subarray
+                }
+                children.add(newChild);
+            }
+            return index;
+        }
+    }
+}
+
+class PropertyArray extends HashMap<String, SimpleProperty> {
+    ArrayNode indices;
+    
+    public PropertyArray(String name, String key, SimpleProperty  value) {
+        indices = new ArrayNode(name, key);
+        super.put(key, value);
+    }
+    
+    @Override
+    public SimpleProperty put(String key, SimpleProperty value) {
+        if (!".".equals(key) && containsKey(key))
+        {
+            throw new IllegalArgumentException("Found duplicate index: " + key + " in array: " + indices.key);
+        }
+        key = indices.add(key);
+        super.put(key, value);
+        return null;
     }
 }
 
@@ -92,7 +194,7 @@ public class INITFileReader {
     final static Pattern nonspace = Pattern.compile("\\S\\[?");
     final static Pattern indices = Pattern.compile("\\d[\\d.]*");
     
-    String strip(String s) {
+    static String strip(String s) {
         return s.replaceAll("^\\s*", "").replaceAll("\\s*$", "");
     }
     
@@ -139,7 +241,7 @@ public class INITFileReader {
                         case "[":
                         closingBracket = line.indexOf(']', macha.end());
                         setName = strip(line.substring(macha.end(), closingBracket));
-                        current = new HashMap<String, Object>();
+                        current = (Map) new PropertySet(setName);
                         doc.put(setName, current);
                         break;
                      
@@ -154,10 +256,13 @@ public class INITFileReader {
                         String value = line.substring(equals + 1);
                         if (setName != null && current.size() == 0 && indices.matcher(propertyName).matches())
                         {
-                            current = new ArrayMap<Object>();
+                            current = (Map) new PropertyArray(setName, propertyName, new SimpleProperty(value));
                             doc.put(setName, current);
                         }
-                        current.put(propertyName, value);
+                        else
+                        {
+                            current.put(propertyName, new SimpleProperty(value));
+                        }
                     }
                 }
             }
@@ -165,7 +270,7 @@ public class INITFileReader {
         for (String key: new TreeSet<String>(doc.keySet()))
         {
             Object valu = doc.get(key);
-            if (valu instanceof String)
+            if (valu instanceof SimpleProperty)
             {
                 System.out.println("\nPROPERTY " + key);
                 System.out.println(" value=" + valu);
@@ -178,7 +283,7 @@ public class INITFileReader {
                 {
                     System.out.println("SET PROPERTY " + skey);
                     Object svalu = current.get(skey);
-                    String text = (String) svalu;
+                    String text = svalu.toString();
                     String prefix = "";
                     int refEndi = -1;
                     int refi = text.indexOf("%[");
