@@ -69,12 +69,20 @@ class SimpleProperty {
     }
 }
 
-class PropertySet extends HashMap<String, SimpleProperty> {
+interface Properties extends Map<String, SimpleProperty> {
+    String name();
+}
+
+class PropertySet extends HashMap<String, SimpleProperty> implements Properties {
     List<String> keys = new ArrayList<String>();
     String name;
     
     public PropertySet(String name) {
         this.name = name;
+    }
+    
+    public String name() {
+        return name;
     }
     
     @Override
@@ -177,12 +185,16 @@ class ArrayNode {
     }
 }
 
-class PropertyArray extends HashMap<String, SimpleProperty> {
+class PropertyArray extends HashMap<String, SimpleProperty> implements Properties {
     ArrayNode indices;
     
     public PropertyArray(String name, String key, SimpleProperty  value) {
         indices = new ArrayNode(name, key);
         super.put(key, value);
+    }
+    
+    public String name() {
+        return indices.key;
     }
     
     @Override
@@ -206,6 +218,8 @@ public class INITFileReader {
         return s.replaceAll("^\\s*", "").replaceAll("\\s*$", "");
     }
     
+    Map<String, Properties> doc = new HashMap<String, Properties>();
+    Properties root;
     
     public INITFileReader(Reader reader) {
         BufferedReader source;
@@ -217,12 +231,10 @@ public class INITFileReader {
         {
             source = new BufferedReader(reader);
         }
-        String line;
-        Map<String, Map<String, SimpleProperty> > doc = new HashMap<String, Map<String, SimpleProperty> >();
-        Map<String, SimpleProperty> root, current;
         root = new PropertySet("[root]");
-        current = root;
         doc.put("", root);
+        String line;
+        Properties current = root;
         String setName = null;
         do
         {
@@ -289,34 +301,99 @@ public class INITFileReader {
                 {
                     System.out.println("SET PROPERTY " + skey);
                     SimpleProperty svalue = current.get(skey);
-                    String text = svalue.getText(0);
-                    for (int ref = 0; ref < svalue.referenceCount(); ++ref)
+                    Object actual = resolveReferences(svalue);
+                    if (actual instanceof String)
                     {
-                        String name = svalue.getReference(ref);
-                        SimpleProperty prop = root.get(name);
-                        if (prop == null)
-                        {
-                            Map<String, SimpleProperty> other = doc.get(name);
-                            if (other == null)
-                            {
-                                System.err.println("UNKNOWN REFERENCE " + name);
-                            }
-                            else
-                            {
-                                System.out.println("REFERENCE " + name);
-                                text += "%[" + name + "]";
-                            }
-                        }
-                        else
-                        {
-                            text += prop.toString();
-                        }
-                        text += svalue.getText(ref + 1);
+                        System.out.println("     value=" + actual);
                     }
-                    System.out.println("     value=" + text);
                 }                
             }
         }
+    }
+    
+    Object resolveReferences(SimpleProperty prop) {
+        String text = prop.getText(0);
+        Properties combined = null;
+        for (int ref = 0; ref < prop.referenceCount(); ++ref)
+        {
+            String reference = prop.getReference(ref);
+            String[] refpath = reference.split(":");
+            Object target = resolveReference(refpath);
+            if (target instanceof SimpleProperty)
+            {
+                target = resolveReferences((SimpleProperty) target);
+            }
+            if (target instanceof String)
+            {
+                text += target.toString();
+            }
+            else if (target instanceof PropertySet)
+            {
+                if (combined == null)
+                {
+                    combined = new PropertySet(reference);
+                }
+                if (combined instanceof PropertySet)
+                {
+                    combined.putAll((PropertySet) target);
+                }
+                else
+                {
+                    System.err.println("WARNING: SKIPPING INVALID COMBINATION: " + combined.getClass().getName() + " + PropertySet");
+                }
+            }
+            else if (target instanceof PropertyArray)
+            {
+                if (combined instanceof PropertyArray)
+                {
+                    System.out.println("COMBINING " + combined.name() + " with " + reference);
+                }
+                else
+                {
+                    combined = (PropertyArray) target;
+                }
+            }
+        }
+        if (combined != null)
+        {
+            return combined;
+        }
+        return text;
+    }
+    
+    Object resolveReference(String[] path) {
+        int start = 1;
+        Properties current = doc.get(path[0]);
+        if (current == null)
+        {
+            current = root;
+            start = 0;
+        }
+        int len = path.length;
+        for (int ref = start; ref < len; ++ref)
+        {
+            SimpleProperty prop = current.get(path[ref]);
+            if (prop == null)
+            {
+                System.err.println("INVALID REFERENCE " + path[ref] + " in " + String.join(":", path));
+                return null;
+            }
+            Object child = resolveReferences(prop);
+            if (child instanceof Properties)
+            {
+                current = (Properties) child;
+            }
+            else if (ref + 1 == len)
+            {
+                return child;
+            }
+            else
+            {
+                System.err.println("WARNING: Trying to take the child of a simple property in " + String.join(":", path));
+                return null;
+            }
+        }
+        return current;
     }
 
     public static void main(String[] args) throws Exception {
